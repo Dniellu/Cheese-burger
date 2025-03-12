@@ -40,7 +40,7 @@ function openMap() {
 // Youbike 站點查詢功能
 
 // 查詢最近的 YouBike 站點
-async function findUbike() {
+async function findYoubike() {
     if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser");
         return;
@@ -129,7 +129,7 @@ function otherServices() {
 // 語言切換
 document.addEventListener("DOMContentLoaded", function () {
     const languageSelector = document.getElementById("language-selector");
-    const elementsToTranslate = ["title", "description", "weather", "map", "ubike", "services"];
+    const elementsToTranslate = ["title", "description", "weather", "map", "Youbike", "services"];
 
     // 載入語言 JSON
     fetch("languages.json")
