@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">智慧路牌</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="language-container">
+            <select id="language-selector">
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+            </select>
+        </div>
+    </header>
+    
+    <h1 id="description">智慧路牌系統</h1>
+    <div class="button-container">
+        <button id="weather" onclick="checkWeather()">🌤 天氣查詢</button>
+        <button id="map" onclick="openMap()">🗺 地圖導航</button>
+        <button id="ubike" onclick="findUbike()">🚲 Youbike 站點查詢</button>
+        <button id="services" onclick="otherServices()">🔧 其他服務</button>
+    </div>
+    
+    <div id="output"></div>
+    <script src="script.js"></script>
+</body>
+</html>
