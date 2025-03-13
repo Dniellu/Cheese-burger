@@ -138,3 +138,5 @@ button:active {
 #language-selector:hover {
     background-color: #f0f0f0;
 }
+
+/*AI助理*/
