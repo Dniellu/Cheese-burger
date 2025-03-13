@@ -1,6 +1,6 @@
 const apiKey = "df0db18b400c04fca56c5117612d6276"; // 請替換為你的 OpenWeather API Key
 
-// 天氣查詢功能
+// {天氣查詢功能}
 function checkWeather() {
     const city = "Taipei";
     document.getElementById('output').innerHTML = "<p>查詢天氣中...</p>";
@@ -31,13 +31,13 @@ function checkWeather() {
         });
 }
 
-// 地圖導航功能
+// {地圖導航功能}
 function openMap() {
     const mapOptions = `
         <div class='map-options'>
-            <button onclick="findLocations('美食', '🍜 美食地圖')">🍜 美食地圖</button>
+            <button onclick="findFood('美食', '🍜 美食地圖')">🍜 美食地圖</button>
             <button onclick="findLocations('校園', '🏫 校園導覽')">🏫 校園導覽</button>
-            <button onclick="findLocations('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
+            <button onclick="findBusstation('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
             <button onclick="findNearestMRT()">🚇 捷運站位置</button>
             <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
         </div>
@@ -45,7 +45,7 @@ function openMap() {
     document.getElementById('output').innerHTML = mapOptions;
 }
 
-// Youbike 站點查詢功能
+
 // 固定的 YouBike 站點資訊
 const youbikeStations = [
     { name: "臺灣師範大學(圖書館)", lat: 25.026641844177753, lng: 121.52978775765962 },
@@ -56,7 +56,7 @@ const youbikeStations = [
     { name: "和平新生路口西南側", lat: 25.02615318481501, lng: 121.5343129630029 }
 ];
 
-// YouBike 站點查詢功能
+// <<YouBike 站點查詢功能>>
 function findYoubike() {
     if (!navigator.geolocation) {
         alert("❌ 您的瀏覽器不支援定位功能！");
@@ -121,7 +121,7 @@ function otherServices() {
     alert("這裡可以加入更多服務功能！");
 }
 
-// 語言切換
+// {語言切換}
 document.addEventListener("DOMContentLoaded", function () {
     const languageSelector = document.getElementById("language-selector");
     const elementsToTranslate = ["title", "description", "weather", "map", "Youbike", "services"];
@@ -164,7 +164,7 @@ const mrtStations = [
 ];
 
 
-// 查找最近的捷運站
+// <<捷運站位置>>
 async function findNearestMRT() {
     if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser");
@@ -223,5 +223,43 @@ function getDistance(lat1, lng1, lat2, lng2) {
     return R * c;
 }
 
+// <<校園導覽功能>>
+function findLocations() {
+    const campusOptions = `
+        <div class='campus-options'>
+            <button onclick="showCampusInfo('和平校區')">🏫 和平校區</button>
+            <button onclick="showCampusInfo('圖書館校區')">📚 圖書館校區</button>
+            <button onclick="showCampusInfo('公館校區')">🏢 公館校區</button>
+            <button onclick="showCampusInfo('林口校區')">🌳 林口校區</button>
+        </div>
+    `;
+    document.getElementById('output').innerHTML = campusOptions;
+}
+25.068513563641734, 121.39796459744231
+// 顯示校區資訊
+function showCampusInfo(campus) {
+    let campusData = {
+        "和平校區": { address: "台北市大安區和平東路", lat: 25.0265, lng: 121.5270 },
+        "圖書館校區": { address: "台北市大安區師大路", lat: 25.0268, lng: 121.5298 },
+        "公館校區": { address: "台北市中正區思源街", lat: 25.0079, lng: 121.5376 },
+        "林口校區": { address: "新北市林口區", lat: 25.0685, lng:121.3979 }
+    };
+
+    let selectedCampus = campusData[campus];
+
+    document.getElementById('output').innerHTML = `
+        <div class='campus-card'>
+            <h2>${campus}</h2>
+            <p><strong>📍 地址:</strong> ${selectedCampus.address}</p>
+            <button onclick="openGoogleMaps(${selectedCampus.lat}, ${selectedCampus.lng})">🚀 開啟導航</button>
+            <button onclick="findLocations()">⬅️ 返回校區選單</button>
+        </div>
+    `;
+}
+
+// 開啟 Google 地圖
+function openGoogleMaps(lat, lng) {
+    window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
+}
 
 
