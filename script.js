@@ -2,7 +2,7 @@ const apiKey = "df0db18b400c04fca56c5117612d6276"; // 請替換為你的 OpenWea
 
 // {天氣查詢功能}
 function checkWeather() {
-    const city = "Taipei";
+    const city = "Chiayi";
     document.getElementById('output').innerHTML = "<p>查詢天氣中...</p>";
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=zh_tw&units=metric`)
