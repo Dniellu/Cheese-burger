@@ -2,7 +2,7 @@ const apiKey = "df0db18b400c04fca56c5117612d6276"; // 請替換為你的 OpenWea
 
 // {天氣查詢功能}
 function checkWeather() {
-    const city = "Taipei";
+    const city = "Chiayi";
     document.getElementById('output').innerHTML = "<p>查詢天氣中...</p>";
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=zh_tw&units=metric`)
@@ -35,9 +35,9 @@ function checkWeather() {
 function openMap() {
     const mapOptions = `
         <div class='map-options'>
-            <button onclick="findLocations('美食', '🍜 美食地圖')">🍜 美食地圖</button>
+            <button onclick="findFood('美食', '🍜 美食地圖')">🍜 美食地圖</button>
             <button onclick="findLocations('校園', '🏫 校園導覽')">🏫 校園導覽</button>
-            <button onclick="findLocations('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
+            <button onclick="findBusstation('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
             <button onclick="findNearestMRT()">🚇 捷運站位置</button>
             <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
         </div>
