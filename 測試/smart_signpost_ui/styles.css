@@ -140,3 +140,96 @@ button:active {
 }
 
 /*AI助理*/
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;  /* 淺灰背景色 */
+}
+
+#ai-assistant {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+}
+
+.assistant-button button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.assistant-button button:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
+}
+
+#menu {
+    display: none;
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    transition: all 0.3s ease;
+}
+
+.assistant-menu button {
+    display: block;
+    margin: 8px 0;
+    padding: 12px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.assistant-menu button:hover {
+    background-color: #45a049;
+}
+
+.assistant-answer {
+    display: none;
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    text-align: center;
+}
+
+.assistant-answer button {
+    padding: 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.assistant-answer button:hover {
+    background-color: #e53935;
+}
+
