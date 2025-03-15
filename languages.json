@@ -1,0 +1,19 @@
+{
+    "en": {
+      "title": "Smart Signpost",
+      "description": "Select a location to guide you.",
+      "weather": "Weather Inquiry",
+      "map": "Map Navigation",
+      "Youbike": "Youbike Station Inquiry",
+      "services": "Other Services"
+    },
+    "zh": {
+      "title": "智慧路牌",
+      "description": "選擇一個地點來引導您。",
+      "weather": "天氣查詢",
+      "map": "地圖導航",
+      "Youbike": "Youbike站點查詢",
+      "services": "其他服務"
+    }
+  }
+  
