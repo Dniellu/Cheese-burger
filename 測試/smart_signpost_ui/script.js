@@ -35,9 +35,9 @@ function checkWeather() {
 function openMap() {
     const mapOptions = `
         <div class='map-options'>
-            <button onclick="findFood('美食', '🍜 美食地圖')">🍜 美食地圖</button>
+            <button onclick="findLocations('美食', '🍜 美食地圖')">🍜 美食地圖</button>
             <button onclick="findLocations('校園', '🏫 校園導覽')">🏫 校園導覽</button>
-            <button onclick="findBusstation('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
+            <button onclick="findLocations('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
             <button onclick="findNearestMRT()">🚇 捷運站位置</button>
             <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
         </div>
@@ -235,14 +235,14 @@ function findLocations() {
     `;
     document.getElementById('output').innerHTML = campusOptions;
 }
-25.068513563641734, 121.39796459744231
+
 // 顯示校區資訊
 function showCampusInfo(campus) {
     let campusData = {
         "和平校區": { address: "台北市大安區和平東路", lat: 25.0265, lng: 121.5270 },
         "圖書館校區": { address: "台北市大安區師大路", lat: 25.0268, lng: 121.5298 },
-        "公館校區": { address: "台北市中正區思源街", lat: 25.0079, lng: 121.5376 },
-        "林口校區": { address: "新北市林口區", lat: 25.0685, lng:121.3979 }
+        "公館校區": { address: "台北市中正區思源街", lat: 25.0150, lng: 121.5340 },
+        "林口校區": { address: "新北市林口區", lat: 25.0735, lng: 121.3890 }
     };
 
     let selectedCampus = campusData[campus];
@@ -263,3 +263,48 @@ function openGoogleMaps(lat, lng) {
 }
 
 
+//<<AI助理>>
+// 顯示選單
+function showMenu() {
+    document.getElementById('menu').style.display = 'block';
+    document.getElementById('answer').style.display = 'none';  // 隱藏解答區
+}
+
+// 顯示選項的解答
+function showAnswer(option) {
+    let answerText = '';
+    switch (option) {
+        case 'weather':
+            answerText = '您可以點擊「天氣查詢」按鈕，輸入城市名稱後，即可查看最新的天氣資訊。';
+            break;
+        case 'map':
+            answerText = '🗺 點擊「地圖導航」按鈕，選擇需要的功能（如美食地圖、公車站點、YouBike 站點等），系統將會幫助您找到最佳的資訊。';
+            break;
+        case 'ubike':
+            answerText = '🚲 點擊「YouBike 站點查詢」按鈕，系統會顯示您附近的 YouBike 站點，包含可借車輛與可還車位。';
+            break;
+        case 'campus':
+            answerText = '🏫 點擊「校園導覽」按鈕，選擇您要參觀的校區，系統將提供導航資訊。';
+            break;
+        case 'metro':
+            answerText = '🚇 點擊「捷運站位置」按鈕，系統將顯示距離您最近的 3 個捷運站，並提供詳細資訊與導航連結。';
+            break;
+        default:
+            answerText = '選擇無效';
+    }
+
+    document.getElementById('answer-text').innerText = answerText;
+    document.getElementById('menu').style.display = 'none';  // 隱藏選單
+    document.getElementById('answer').style.display = 'block';  // 顯示解答區
+}
+
+// 關閉解答區並返回選單
+function closeAnswer() {
+    document.getElementById('answer').style.display = 'none';
+    document.getElementById('menu').style.display = 'block';  // 重新顯示選單
+}
+
+// 關閉選單
+function closeMenu() {
+    document.getElementById('menu').style.display = 'none';  // 隱藏選單
+}
