@@ -1,13 +1,78 @@
 const apiKey = "df0db18b400c04fca56c5117612d6276"; // 請替換為你的 OpenWeather API Key
 
-// {天氣查詢功能}
+// {天氣查詢功能(A)}
+document.addEventListener("DOMContentLoaded", function () {
+    const citySelect = document.getElementById("city");
+    const districtSelect = document.getElementById("district");
+    const districtLabel = document.getElementById("districtLabel");
+
+    // 縣市對應的行政區
+    const districts = {
+        "Taipei": ["中正區", "大同區", "中山區", "松山區", "大安區", "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"],
+        "New Taipei": ["板橋區", "三重區", "中和區", "永和區", "新莊區", "新店區", "樹林區", "鶯歌區", "三峽區", "淡水區", "汐止區", "瑞芳區", "五股區", "泰山區", "林口區", "深坑區", "石碇區", "坪林區", "三芝區", "石門區", "八里區", "平溪區", "雙溪區", "貢寮區", "烏來區"],
+        "Taoyuan": ["桃園區", "中壢區", "大溪區", "楊梅區", "蘆竹區", "龜山區", "八德區", "龍潭區", "平鎮區", "大園區", "觀音區", "新屋區", "復興區"],
+        "Taichung": ["中區", "東區", "南區", "西區", "北區", "北屯區", "西屯區", "南屯區", "大里區", "太平區", "清水區", "梧棲區", "沙鹿區", "大雅區", "神岡區", "潭子區", "龍井區", "烏日區", "豐原區", "大甲區", "后里區", "外埔區", "大肚區", "東勢區", "石岡區", "新社區", "和平區"],
+        "Tainan": ["中西區", "東區", "南區", "北區", "安平區", "安南區", "永康區", "仁德區", "歸仁區", "新化區", "新市區", "善化區", "安定區", "山上區", "大內區", "玉井區", "楠西區", "南化區", "左鎮區", "龍崎區", "關廟區", "佳里區", "西港區", "七股區", "將軍區", "學甲區", "北門區", "新營區", "後壁區", "白河區", "東山區", "六甲區", "下營區", "柳營區", "鹽水區"],
+        "Kaohsiung": ["楠梓區", "左營區", "鼓山區", "三民區", "鹽埕區", "前金區", "新興區", "苓雅區", "前鎮區", "小港區", "鳳山區", "大寮區", "鳥松區", "仁武區", "大樹區", "旗山區", "美濃區", "六龜區", "內門區", "杉林區", "甲仙區", "桃源區", "茂林區", "那瑪夏區", "湖內區", "路竹區", "阿蓮區", "田寮區", "燕巢區", "橋頭區", "岡山區", "梓官區", "彌陀區", "永安區"],
+        "Keelung": ["仁愛區", "信義區", "中正區", "中山區", "安樂區", "暖暖區", "七堵區"],
+        "Hsinchu": ["東區", "北區", "香山區"],
+        "Hsinchu County": ["竹北市", "竹東鎮", "新埔鎮", "關西鎮", "湖口鄉", "新豐鄉", "芎林鄉", "橫山鄉", "北埔鄉", "寶山鄉", "峨眉鄉", "尖石鄉", "五峰鄉"],
+        "Miaoli County": ["苗栗市", "頭份市", "竹南鎮", "後龍鎮", "苑裡鎮", "通霄鎮", "造橋鄉", "三義鄉", "銅鑼鄉", "公館鄉", "大湖鄉", "獅潭鄉", "三灣鄉", "南庄鄉", "泰安鄉"],
+        "Changhua County": ["彰化市", "鹿港鎮", "和美鎮", "線西鄉", "伸港鄉", "福興鄉", "秀水鄉", "花壇鄉", "芬園鄉", "員林市", "溪湖鎮", "田中鎮", "大村鄉", "埔鹽鄉", "埔心鄉", "永靖鄉", "社頭鄉", "二水鄉"],
+        "Nantou County": ["南投市", "草屯鎮", "埔里鎮", "竹山鎮", "集集鎮", "名間鄉", "鹿谷鄉", "中寮鄉", "魚池鄉", "國姓鄉", "水里鄉", "信義鄉", "仁愛鄉"],
+        "Yunlin County": ["斗六市", "斗南鎮", "虎尾鎮", "西螺鎮", "土庫鎮", "北港鎮", "古坑鄉", "大埤鄉", "莿桐鄉", "林內鄉"],
+        "Chiayi City": ["東區", "西區"],
+        "Chiayi County": ["太保市", "朴子市", "布袋鎮", "大林鎮", "民雄鄉", "溪口鄉", "新港鄉", "六腳鄉", "東石鄉", "義竹鄉", "鹿草鄉"],
+        "Pingtung County": ["屏東市", "潮州鎮", "東港鎮", "恆春鎮", "里港鄉", "竹田鄉", "長治鄉", "麟洛鄉", "萬丹鄉", "內埔鄉", "高樹鄉", "枋寮鄉"],
+        "Yilan County": ["宜蘭市", "羅東鎮", "蘇澳鎮", "頭城鎮", "礁溪鄉", "壯圍鄉", "員山鄉", "冬山鄉", "五結鄉", "三星鄉", "大同鄉", "南澳鄉"],
+        "Hualien County": ["花蓮市", "鳳林鎮", "玉里鎮", "新城鄉", "吉安鄉", "壽豐鄉", "秀林鄉", "光復鄉"],
+        "Taitung County": ["台東市", "成功鎮", "關山鎮", "卑南鄉", "綠島鄉", "蘭嶼鄉", "太麻里鄉", "大武鄉"],
+        "Penghu County": ["馬公市", "湖西鄉", "白沙鄉", "西嶼鄉", "望安鄉", "七美鄉"],
+        "Kinmen County": ["金城鎮", "金湖鎮", "金沙鎮", "烈嶼鄉", "烏坵鄉"],
+        "Lienchiang County": ["南竿鄉", "北竿鄉", "莒光鄉", "東引鄉"]
+    };
+    
+
+    document.getElementById("weather").addEventListener("click", function () {
+        document.getElementById("weatherOptions").style.display = "block";
+    });
+
+    citySelect.addEventListener("change", function () {
+        const city = this.value;
+        districtSelect.innerHTML = "<option value=''>請選擇行政區</option>";
+
+        if (districts[city]) {
+            districtLabel.style.display = "block";
+            districtSelect.style.display = "block";
+            districts[city].forEach(district => {
+                const option = document.createElement("option");
+                option.value = district;
+                option.textContent = district;
+                districtSelect.appendChild(option);
+            });
+        } else {
+            districtLabel.style.display = "none";
+            districtSelect.style.display = "none";
+        }
+    });
+
+    document.getElementById("submitWeather").addEventListener("click", checkWeather);
+});
+
 function checkWeather() {
-    const city = "Taipei";
+    const city = document.getElementById("city").value;
+    const district = document.getElementById("district").value;
+    const location = district ? `${district},${city}` : city;
+
     document.getElementById('output').innerHTML = "<p>查詢天氣中...</p>";
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=zh_tw&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&lang=zh_tw&units=metric`)
         .then(response => response.json())
         .then(data => {
+            if (data.cod !== 200) {
+                throw new Error(data.message);
+            }
+
             const weather = data.weather[0].description;
             const temperature = data.main.temp;
             const humidity = data.main.humidity;
@@ -16,7 +81,7 @@ function checkWeather() {
 
             document.getElementById('output').innerHTML = `
                 <div class='weather-card'>
-                    <h2>🌍 ${city} 天氣資訊</h2>
+                    <h2>🌍 ${location} 天氣資訊</h2>
                     <p><strong>🌦 天氣狀況:</strong> ${weather}</p>
                     <p><strong>🌡 氣溫:</strong> ${temperature}°C</p>
                     <p><strong>💧 濕度:</strong> ${humidity}%</p>
@@ -26,12 +91,17 @@ function checkWeather() {
             `;
         })
         .catch(error => {
-            document.getElementById('output').innerHTML = "<p>天氣查詢失敗，請稍後再試。</p>";
+            document.getElementById('output').innerHTML = `<p>請選擇縣市：${error.message}</p>`;
             console.error("Error fetching weather data:", error);
         });
 }
 
-// {地圖導航功能}
+document.getElementById("closeWeather").addEventListener("click", function () {
+    document.getElementById("weatherOptions").style.display = "none"; // 隱藏天氣選單
+    document.getElementById("output").innerHTML = ""; // 清空顯示內容
+});
+
+// {地圖導航功能(B)}
 function openMap() {
     const mapOptions = `
         <div class='map-options'>
@@ -46,7 +116,7 @@ function openMap() {
 }
 
 
-// 固定的 YouBike 站點資訊
+// YouBike 站點資訊(C)
 const youbikeStations = [
     { name: "臺灣師範大學(圖書館)", lat: 25.026641844177753, lng: 121.52978775765962 },
     { name: "和平龍泉街口", lat: 25.026398864512807, lng: 121.52981525441362 },
@@ -56,7 +126,7 @@ const youbikeStations = [
     { name: "和平新生路口西南側", lat: 25.02615318481501, lng: 121.5343129630029 }
 ];
 
-// <<YouBike 站點查詢功能>>
+// <<YouBike 站點查詢功能(C)>>
 function findYoubike() {
     if (!navigator.geolocation) {
         alert("❌ 您的瀏覽器不支援定位功能！");
@@ -68,19 +138,13 @@ function findYoubike() {
     navigator.geolocation.getCurrentPosition(position => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
-
-        // 計算距離並排序
         let stations = youbikeStations.map(station => {
             return {
                 ...station,
                 distance: getDistance(userLat, userLng, station.lat, station.lng)
             };
         });
-
-        // 根據距離排序（最近的排前面）
         stations.sort((a, b) => a.distance - b.distance);
-
-        // 顯示結果
         let outputContainer = document.getElementById('output');
         outputContainer.innerHTML = "<h2>🚲 附近的 YouBike 站點</h2>";
 
@@ -99,7 +163,6 @@ function findYoubike() {
     });
 }
 
-// 計算兩點之間的距離（單位：公里）
 function getDistance(lat1, lng1, lat2, lng2) {
     const R = 6371; // 地球半徑 (公里)
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -111,52 +174,34 @@ function getDistance(lat1, lng1, lat2, lng2) {
     return R * c;
 }
 
-// 開啟 Google 地圖導航
 function openGoogleMaps(lat, lng) {
     window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
 }
 
-// 其他服務功能
+// {其他服務功能(A)}
 function otherServices() {
-    alert("這裡可以加入更多服務功能！");
+    const serviceOptions = `
+        <div class='service-options'>
+            <button onclick="openFoodWheel()">🎡 美食轉盤</button>
+            <button onclick="openWhiteboard()">📝 電子白板</button>
+        </div>
+    `;
+    document.getElementById('output').innerHTML = serviceOptions;
 }
 
-// {語言切換}
-document.addEventListener("DOMContentLoaded", function () {
-    const languageSelector = document.getElementById("language-selector");
-    const elementsToTranslate = ["title", "description", "weather", "map", "Youbike", "services"];
+// 美食轉盤(B)
+function openFoodWheel() {
+    alert("即將開啟美食轉盤功能！");
+    // 這裡可以替換成導向對應頁面的程式碼，例如 window.location.href = "food-wheel.html";
+}
 
-    // 載入語言 JSON
-    fetch("languages.json")
-        .then(response => response.json())
-        .then(languages => {
-            // 設定語言切換事件
-            languageSelector.addEventListener("change", function () {
-                const selectedLanguage = languageSelector.value;
-                setLanguage(selectedLanguage, languages);
-            });
+// 電子白板(B)
+function openWhiteboard() {
+    alert("即將開啟電子白板功能！");
+    // 這裡可以替換成導向對應頁面的程式碼，例如 window.location.href = "whiteboard.html";
+}
 
-            // 預設載入本地存儲的語言，或設置為英文
-            const defaultLanguage = localStorage.getItem("language") || "en";
-            languageSelector.value = defaultLanguage;
-            setLanguage(defaultLanguage, languages);
-        });
-
-    function setLanguage(lang, languages) {
-        if (!languages[lang]) return;
-
-        // 更新 HTML 內容
-        elementsToTranslate.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) element.textContent = languages[lang][id];
-        });
-
-        // 存入本地存儲，保持選擇
-        localStorage.setItem("language", lang);
-    }
-});
-
-// 捷運站資料 (可以替換為官方 API)
+// 捷運站資料 (C)
 const mrtStations = [
     { name: "古亭站", line: "綠線 / 棕線", address: "台北市中正區羅斯福路二段", lat: 25.02602, lng: 121.52291 },
     { name: "台電大樓站", line: "綠線", address: "台北市大安區羅斯福路三段", lat: 25.02083, lng: 121.52850 },
@@ -164,7 +209,7 @@ const mrtStations = [
 ];
 
 
-// <<捷運站位置>>
+// <<捷運站位置(B)>>
 async function findNearestMRT() {
     if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser");
@@ -174,20 +219,14 @@ async function findNearestMRT() {
     navigator.geolocation.getCurrentPosition((position) => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
-
-        // 計算距離
         let stations = mrtStations.map(station => {
             return {
                 ...station,
                 distance: getDistance(userLat, userLng, station.lat, station.lng)
             };
         });
-
-        // 按距離排序，取最近的3個捷運站
         stations.sort((a, b) => a.distance - b.distance);
         stations = stations.slice(0, 3);
-
-        // 顯示結果
         let outputContainer = document.getElementById('output');
         outputContainer.innerHTML = "<h2>🚇 捷運站位置</h2>";
         stations.forEach(station => {
@@ -206,12 +245,11 @@ async function findNearestMRT() {
     });
 }
 
-// 開啟 Google Maps 導航
 function openGoogleMaps(lat, lng) {
     window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
 }
 
-// 計算距離（Haversine formula）
+
 function getDistance(lat1, lng1, lat2, lng2) {
     const R = 6371; // 地球半徑 (公里)
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -223,7 +261,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
     return R * c;
 }
 
-// <<校園導覽功能>>
+// <<校園導覽功能(B)>>
 function findLocations() {
     const campusOptions = `
         <div class='campus-options'>
@@ -236,7 +274,7 @@ function findLocations() {
     document.getElementById('output').innerHTML = campusOptions;
 }
 
-// 顯示校區資訊
+// 顯示校區資訊(C)
 function showCampusInfo(campus) {
     let campusData = {
         "和平校區": { address: "台北市大安區和平東路", lat: 25.0265, lng: 121.5270 },
@@ -257,20 +295,17 @@ function showCampusInfo(campus) {
     `;
 }
 
-// 開啟 Google 地圖
 function openGoogleMaps(lat, lng) {
     window.open(`https://www.google.com/maps?q=${lat},${lng}`, "_blank");
 }
 
 
 //<<AI助理>>
-// 顯示選單
 function showMenu() {
     document.getElementById('menu').style.display = 'block';
-    document.getElementById('answer').style.display = 'none';  // 隱藏解答區
+    document.getElementById('answer').style.display = 'none'; 
 }
 
-// 顯示選項的解答
 function showAnswer(option) {
     let answerText = '';
     switch (option) {
@@ -294,17 +329,16 @@ function showAnswer(option) {
     }
 
     document.getElementById('answer-text').innerText = answerText;
-    document.getElementById('menu').style.display = 'none';  // 隱藏選單
-    document.getElementById('answer').style.display = 'block';  // 顯示解答區
+    document.getElementById('menu').style.display = 'none'; 
+    document.getElementById('answer').style.display = 'block'; 
 }
 
-// 關閉解答區並返回選單
 function closeAnswer() {
     document.getElementById('answer').style.display = 'none';
-    document.getElementById('menu').style.display = 'block';  // 重新顯示選單
+    document.getElementById('menu').style.display = 'block';
 }
 
-// 關閉選單
+
 function closeMenu() {
-    document.getElementById('menu').style.display = 'none';  // 隱藏選單
+    document.getElementById('menu').style.display = 'none';
 }
