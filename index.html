@@ -21,6 +21,7 @@
     <div class="button-container">
         <button id="weather" onclick="checkWeather()">🌤 天氣查詢</button>
         <button id="map" onclick="openMap()">🗺 地圖導航</button>
+        <button id="classroomGuide" onclick="toggleClassroomGuide()">🏫 教室導引</button>
         <button id="services" onclick="otherServices()">🔧 其他服務</button>
     </div>
     <!--天氣選單(B)-->
@@ -65,9 +66,9 @@
 
     
 
-    <!-- AI小助手按鈕(A) -->
+    <!-- 小助手按鈕(A) -->
     <div id="ai-assistant" class="assistant-button">
-        <button onclick="showMenu()">AI 小助手</button>
+        <button onclick="showMenu()">小助手</button>
     </div>
 
     <!-- 選單(B) -->
@@ -88,7 +89,7 @@
     <script src="scripts.js"></script>
 
     <div id="output"></div>
-    <script src="script.js"></script>
+
     <script>
         if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js")
@@ -96,5 +97,37 @@
     .catch((error) => console.log("Service Worker 註冊失敗:", error));
 }
     </script>
+    <!--教室導引選單(B)-->
+    <div class="container">
+        <!-- 選單部分 -->
+        <div id="weatherOptions">
+            <select id="area" onchange="updateClassrooms()">
+                <option value="">請選擇區域</option>
+                <option value="cheng">誠</option>
+                <option value="zheng">正</option>
+                <option value="qin">勤</option>
+                <option value="pu">樸</option>
+            </select>
+
+            <select id="floor" onchange="updateClassrooms()">
+                <option value="">請選擇樓層</option>
+            </select>
+
+            <select id="classroom">
+                <option value="">請選擇教室</option>
+            </select>
+
+            <button id="submitWeather" onclick="showImage()">顯示圖片</button>
+        </div>
+
+        <!-- 顯示圖片部分 -->
+        <div id="weatherDisplay">
+            <div id="result" style="display: none;">
+                <img id="classroom-image" src="" alt="教室圖片">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
