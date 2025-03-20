@@ -106,7 +106,7 @@ function openMap() {
     const mapOptions = `
         <div class='map-options'>
             <button onclick="findFood('美食', '🍜 美食地圖')">🍜 美食地圖</button>
-            <button onclick="findLocations('校園', '🏫 校園導覽')">🏫 校園導覽</button>
+            <button onclick="findLocations('校園', '🏫 校區介紹')">🏫 校區介紹</button>
             <button onclick="findBusstation('公車站', '🚏 公車站牌位置')">🚏 公車站牌位置</button>
             <button onclick="findNearestMRT()">🚇 捷運站位置</button>
             <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
@@ -261,7 +261,7 @@ function getDistance(lat1, lng1, lat2, lng2) {
     return R * c;
 }
 
-// <<校園導覽功能(B)>>
+// <校區介紹功能(B)>>
 function findLocations() {
     const campusOptions = `
         <div class='campus-options'>
@@ -300,7 +300,7 @@ function openGoogleMaps(lat, lng) {
 }
 
 
-//<<AI助理>>
+//<<AI助理(A)>>
 function showMenu() {
     document.getElementById('menu').style.display = 'block';
     document.getElementById('answer').style.display = 'none'; 
@@ -319,7 +319,7 @@ function showAnswer(option) {
             answerText = '🚲 點擊「YouBike 站點查詢」按鈕，系統會顯示您附近的 YouBike 站點，包含可借車輛與可還車位。';
             break;
         case 'campus':
-            answerText = '🏫 點擊「校園導覽」按鈕，選擇您要參觀的校區，系統將提供導航資訊。';
+            answerText = '🏫 點擊「校區介紹」按鈕，選擇您要參觀的校區，系統將提供導航資訊。';
             break;
         case 'metro':
             answerText = '🚇 點擊「捷運站位置」按鈕，系統將顯示距離您最近的 3 個捷運站，並提供詳細資訊與導航連結。';
@@ -342,3 +342,81 @@ function closeAnswer() {
 function closeMenu() {
     document.getElementById('menu').style.display = 'none';
 }
+
+//教室導引(B)
+const floorData = ["1樓", "2樓", "3樓", "4樓", "5樓"];
+
+function toggleDropdown() {
+    const menu = document.getElementById("dropdown-menu");
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+}
+
+function updateFloors() {
+    const floorSelect = document.getElementById("floor");
+    floorSelect.innerHTML = '<option value="">請選擇樓層</option>';
+    document.getElementById("classroom").innerHTML = '<option value="">請選擇教室</option>';
+    
+    floorData.forEach(floor => {
+        const option = document.createElement("option");
+        option.value = floor;
+        option.textContent = floor;
+        floorSelect.appendChild(option);
+    });
+    floorSelect.disabled = false;
+}
+
+function updateClassrooms() {
+    const areaMap = {"cheng": "誠", "zheng": "正", "qin": "勤", "pu": "樸"};
+    const area = document.getElementById("area").value;
+    const floor = document.getElementById("floor").value;
+    const classroomSelect = document.getElementById("classroom");
+    classroomSelect.innerHTML = '<option value="">請選擇教室</option>';
+
+    if (area && floor) {
+        let floorNumber = floor.charAt(0); // 取得樓層數字（1樓 -> 1）
+        for (let i = 1; i <= 9; i++) {
+            const classroom = `${areaMap[area]}${floorNumber}0${i}`;
+            const option = document.createElement("option");
+            option.value = classroom;
+            option.textContent = classroom;
+            classroomSelect.appendChild(option);
+        }
+        classroomSelect.disabled = false;
+    } else {
+        classroomSelect.disabled = true;
+    }
+}
+
+function showImage() {
+    const classroom = document.getElementById("classroom").value;
+    
+    if (!classroom) {
+        alert("請選擇完整的教室區域、樓層和教室！");
+        return;
+    }
+
+    // 根據選擇的教室名稱直接生成圖片路徑
+    const imagePath = `images/${classroom}.jpg`;
+
+    // 設置圖片顯示
+    const classroomImage = document.getElementById("classroom-image");
+    classroomImage.src = imagePath;
+    document.getElementById("result").style.display = "block";
+
+    // 如果圖片加載失敗則顯示預設圖片
+    classroomImage.onerror = function() {
+        console.error(`無法加載圖片: ${imagePath}`);  // 在控制台輸出錯誤訊息
+        this.src = "images/default.jpg";  // 顯示預設圖片
+    };
+
+    // 確保圖片已經成功加載
+    classroomImage.onload = function() {
+        console.log(`成功加載圖片: ${imagePath}`);  // 在控制台輸出成功訊息
+    };
+}
+
+
+
+
+
+
