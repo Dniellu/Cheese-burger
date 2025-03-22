@@ -1,0 +1,387 @@
+/* 設定整體頁面字型和背景 */
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 0;
+}
+
+/* 設定標題 */
+h1 {
+    margin-top: 40px;
+    font-size: 32px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* 按鈕容器 */
+.button-container {
+    margin-top: 40px;
+}
+
+/* 按鈕樣式 */
+button {
+    display: inline-block;
+    width: 220px;
+    margin: 12px auto;
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;  /* 增加過渡效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: translateY(-4px); /* 點擊時按鈕微微上升 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0); /* 按下時按鈕還原 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 輸出區域樣式 */
+#output {
+    margin-top: 30px;
+    font-size: 20px;
+    color: #34495e;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* 增加頁面邊距 */
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+}
+
+/* 設定頁面邊框和圓角效果 */
+.container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+/* 屏幕尺寸小於 600px 時的響應式設計 */
+@media (max-width: 600px) {
+    button {
+        width: 180px; /* 按鈕在小屏幕上變小 */
+        font-size: 16px; /* 字體大小調整 */
+    }
+
+    h1 {
+        font-size: 28px; /* 標題字型調整 */
+    }
+
+    #output {
+        font-size: 18px; /* 文字大小調整 */
+    }
+}
+#output {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.station-card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.station-card h3 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+}
+
+.station-card p {
+    margin: 5px 0;
+}
+
+/* 語言選擇按鈕固定於右下角 */
+.language-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 語言選擇按鈕樣式 */
+#language-selector {
+    padding: 8px;
+    font-size: 16px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+#language-selector:hover {
+    background-color: #f0f0f0;
+}
+
+/*AI助理*/
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;  /* 淺灰背景色 */
+}
+
+#ai-assistant {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+}
+
+.assistant-button button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.assistant-button button:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
+}
+
+#menu {
+    display: none;
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    transition: all 0.3s ease;
+}
+
+.assistant-menu button {
+    display: block;
+    margin: 8px 0;
+    padding: 12px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.assistant-menu button:hover {
+    background-color: #45a049;
+}
+
+.assistant-answer {
+    display: none;
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    text-align: center;
+}
+
+.assistant-answer button {
+    padding: 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.assistant-answer button:hover {
+    background-color: #e53935;
+}
+
+.service-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+.service-options button {
+    padding: 10px;
+    font-size: 16px;
+}
+
+#whiteboard-container {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#whiteboard {
+    border: 2px solid #000;
+    background-color: white;
+    width: 90%;
+    height: 70vh;
+}
+
+#backButton {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#backButton:hover {
+    background-color: darkred;
+}
+
+/* 天氣選單樣式 */
+#weatherOptions {
+    width: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 2px solid #3498db;
+}
+
+
+/* 標籤樣式 */
+label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+    display: block;
+    margin-top: 10px;
+}
+
+/* 下拉選單樣式 */
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+/* 查詢按鈕 */
+#submitWeather {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#submitWeather:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#submitWeather:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 響應式設計 */
+@media (max-width: 600px) {
+    #weatherOptions {
+        width: 90%;
+    }
+}
+
+/* 容器讓內容集中在畫面中央並水平排列 */
+.weather-container {
+    display: flex;
+    justify-content: center;  /* 水平置中 */
+    align-items: center;  /* 垂直對齊 */
+    gap: 20px;  /* 兩個區塊之間的間距 */
+    margin-top: 50px; /* 預留上方空間 */
+}
+
+/* 兩個區塊的樣式 */
+#weatherOptions, #weatherDisplay {
+    flex: 1; /* 讓兩者等寬 */
+    max-width: 400px; /* 最大寬度，避免過度擴展 */
+    min-width: 300px; /* 確保小螢幕下仍可正常顯示 */
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 2px solid #3498db;
+    margin-left: 100px;
+}
+
+/* 讓天氣資訊的顏色不同 */
+#weatherDisplay {
+    border-color: #2ecc71; /* 綠色邊框 */
+}
+
+/* 響應式設計（小螢幕時改為垂直排列） */
+@media (max-width: 768px) {
+    .weather-container {
+        flex-direction: column; /* 小螢幕時垂直排列 */
+        align-items: center;
+    }
+    #weatherOptions, #weatherDisplay {
+        width: 90%;
+        max-width: none;
+    }
+}
+
