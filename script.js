@@ -277,9 +277,105 @@ function otherServices() {
     </div>`;
 }
 
+let options = ["壽司", "燒烤", "火鍋", "炸雞", "拉麵", "便當"];
+let spinning = false;
+let wheelCreated = false;
+
+// 點擊 "美食轉盤" 按鈕後，動態載入轉盤
 function openFoodWheel() {
-  alert("即將開啟美食轉盤功能！");
+    if (!wheelCreated) {
+        // 創建轉盤 HTML
+        let foodWheelModal = document.createElement("div");
+        foodWheelModal.id = "foodWheelModal";
+        foodWheelModal.className = "wheel-container";
+        foodWheelModal.innerHTML = `
+            <canvas id="wheelCanvas" width="300" height="300"></canvas>
+            <div id="pointer" class="pointer"></div>
+            <button class="spin-btn" id="spinBtn">轉動!</button>
+            <button class="close-btn" id="closeBtn">關閉</button>
+            <p id="result"></p>
+        `;
+
+        // 插入到網頁
+        document.body.appendChild(foodWheelModal);
+
+        // 繪製轉盤
+        drawWheel();
+
+        // 綁定按鈕事件
+        document.getElementById("spinBtn").addEventListener("click", spinWheel);
+        document.getElementById("closeBtn").addEventListener("click", closeFoodWheel);
+
+        wheelCreated = true; // 標記轉盤已創建
+    }
+
+    // 顯示轉盤
+    document.getElementById("foodWheelModal").style.display = "block";
 }
+
+// 關閉美食轉盤
+function closeFoodWheel() {
+    document.getElementById("foodWheelModal").style.display = "none";
+}
+
+// 繪製轉盤（使用 Canvas）
+function drawWheel() {
+    let canvas = document.getElementById("wheelCanvas");
+    let ctx = canvas.getContext("2d");
+    let numOptions = options.length;
+    let centerX = canvas.width / 2;
+    let centerY = canvas.height / 2;
+    let radius = centerX; // 半徑
+
+    for (let i = 0; i < numOptions; i++) {
+        let startAngle = (i * 2 * Math.PI) / numOptions;
+        let endAngle = ((i + 1) * 2 * Math.PI) / numOptions;
+        
+        // 設定顏色（交錯顏色）
+        ctx.fillStyle = i % 2 === 0 ? "#FFD700" : "#FF6347";
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        // 設定文字
+        ctx.fillStyle = "black";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        let textAngle = startAngle + (endAngle - startAngle) / 2;
+        let textX = centerX + Math.cos(textAngle) * (radius * 0.7);
+        let textY = centerY + Math.sin(textAngle) * (radius * 0.7);
+        ctx.fillText(options[i], textX, textY);
+    }
+}
+
+// 轉動轉盤
+function spinWheel() {
+    if (spinning) return;
+    spinning = true;
+
+    let canvas = document.getElementById("wheelCanvas");
+    let randomDegree = Math.floor(3600 + Math.random() * 360);
+    let selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / options.length));
+    let selectedFood = options[selectedIndex % options.length];
+
+    // 旋轉轉盤
+    canvas.style.transition = "transform 3s ease-out";
+    canvas.style.transform = `rotate(${randomDegree}deg)`;
+
+    // 同時旋轉箭頭
+    document.getElementById("pointer").style.transition = "transform 3s ease-out";
+    document.getElementById("pointer").style.transform = `rotate(${randomDegree}deg)`;
+
+    setTimeout(() => {
+        document.getElementById("result").innerText = `今天吃: ${selectedFood}! 🍽️`;
+        spinning = false;
+    }, 3000);
+}
+
 
 function openWhiteboard() {
   alert("即將開啟電子白板功能！");
