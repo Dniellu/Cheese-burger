@@ -1,109 +1,73 @@
+const apiKey = "df0db18b400c04fca56c5117612d6276";
+// {天氣查詢功能(A)}
 function closeAllFeatureBoxes() {
-    // 關閉天氣查詢區塊
-    const weatherBox = document.getElementById("weatherBox");
-    if (weatherBox) weatherBox.style.display = "none";
-  
-    // 關閉教室導引結果區（例如圖片）
-    const result = document.getElementById("result");
-    if (result) result.style.display = "none";
-  
-    // 清空主要輸出區域
-    const output = document.getElementById("output");
-    if (output) output.innerHTML = "";
-  }
+  // 關閉天氣查詢區塊
+  const weatherBox = document.getElementById("weatherBox");
+  if (weatherBox) weatherBox.style.display = "none";
 
-  // 天氣查詢 - 城市與行政區設定
-const districts = {
-  "臺北市": ["中正區", "大同區", "中山區", "松山區", "大安區", "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"],
-  "新北市": ["板橋區", "三重區", "中和區", "永和區", "新莊區", "新店區", "樹林區", "鶯歌區", "三峽區", "淡水區", "汐止區", "瑞芳區", "五股區", "泰山區", "林口區", "深坑區", "石碇區", "坪林區", "三芝區", "石門區", "八里區", "平溪區", "雙溪區", "貢寮區", "烏來區"],
-  "桃園市": ["桃園區", "中壢區", "大溪區", "楊梅區", "蘆竹區", "龜山區", "八德區", "龍潭區", "平鎮區", "大園區", "觀音區", "新屋區", "復興區"],
-  "臺中市": ["中區", "東區", "南區", "西區", "北區", "北屯區", "西屯區", "南屯區", "大里區", "太平區", "清水區", "梧棲區", "沙鹿區", "大雅區", "神岡區", "潭子區", "龍井區", "烏日區", "豐原區", "大甲區", "后里區", "外埔區", "大肚區", "東勢區", "石岡區", "新社區", "和平區"],
-  "臺南市": ["中西區", "東區", "南區", "北區", "安平區", "安南區", "永康區", "仁德區", "歸仁區", "新化區", "新市區", "善化區", "安定區", "山上區", "大內區", "玉井區", "楠西區", "南化區", "左鎮區", "龍崎區", "關廟區", "佳里區", "西港區", "七股區", "將軍區", "學甲區", "北門區", "新營區", "後壁區", "白河區", "東山區", "六甲區", "下營區", "柳營區", "鹽水區"],
-  "高雄市": ["楠梓區", "左營區", "鼓山區", "三民區", "鹽埕區", "前金區", "新興區", "苓雅區", "前鎮區", "小港區", "鳳山區", "大寮區", "鳥松區", "仁武區", "大樹區", "旗山區", "美濃區", "六龜區", "內門區", "杉林區", "甲仙區", "桃源區", "茂林區", "那瑪夏區", "湖內區", "路竹區", "阿蓮區", "田寮區", "燕巢區", "橋頭區", "岡山區", "梓官區", "彌陀區", "永安區"],
-  "基隆市": ["仁愛區", "信義區", "中正區", "中山區", "安樂區", "暖暖區", "七堵區"],
-  "新竹市": ["東區", "北區", "香山區"],
-  "新竹縣": ["竹北市", "竹東鎮", "新埔鎮", "關西鎮", "湖口鄉", "新豐鄉", "芎林鄉", "橫山鄉", "北埔鄉", "寶山鄉", "峨眉鄉", "尖石鄉", "五峰鄉"],
-  "苗栗縣": ["苗栗市", "頭份市", "竹南鎮", "後龍鎮", "苑裡鎮", "通霄鎮", "造橋鄉", "三義鄉", "銅鑼鄉", "公館鄉", "大湖鄉", "獅潭鄉", "三灣鄉", "南庄鄉", "泰安鄉"],
-  "彰化縣": ["彰化市", "鹿港鎮", "和美鎮", "線西鄉", "伸港鄉", "福興鄉", "秀水鄉", "花壇鄉", "芬園鄉", "員林市", "溪湖鎮", "田中鎮", "大村鄉", "埔鹽鄉", "埔心鄉", "永靖鄉", "社頭鄉", "二水鄉"],
-  "南投縣": ["南投市", "草屯鎮", "埔里鎮", "竹山鎮", "集集鎮", "名間鄉", "鹿谷鄉", "中寮鄉", "魚池鄉", "國姓鄉", "水里鄉", "信義鄉", "仁愛鄉"],
-  "雲林縣": ["斗六市", "斗南鎮", "虎尾鎮", "西螺鎮", "土庫鎮", "北港鎮", "古坑鄉", "大埤鄉", "莿桐鄉", "林內鄉"],
-  "嘉義市": ["東區", "西區"],
-  "嘉義縣": ["太保市", "朴子市", "布袋鎮", "大林鎮", "民雄鄉", "溪口鄉", "新港鄉", "六腳鄉", "東石鄉", "義竹鄉", "鹿草鄉"],
-  "屏東縣": ["屏東市", "潮州鎮", "東港鎮", "恆春鎮", "里港鄉", "竹田鄉", "長治鄉", "麟洛鄉", "萬丹鄉", "內埔鄉", "高樹鄉", "枋寮鄉"],
-  "宜蘭縣": ["宜蘭市", "羅東鎮", "蘇澳鎮", "頭城鎮", "礁溪鄉", "壯圍鄉", "員山鄉", "冬山鄉", "五結鄉", "三星鄉", "大同鄉", "南澳鄉"],
-  "花蓮縣": ["花蓮市", "鳳林鎮", "玉里鎮", "新城鄉", "吉安鄉", "壽豐鄉", "秀林鄉", "光復鄉"],
-  "臺東縣": ["台東市", "成功鎮", "關山鎮", "卑南鄉", "綠島鄉", "蘭嶼鄉", "太麻里鄉", "大武鄉"],
-  "澎湖縣": ["馬公市", "湖西鄉", "白沙鄉", "西嶼鄉", "望安鄉", "七美鄉"],
-  "金門縣": ["金城鎮", "金湖鎮", "金沙鎮", "烈嶼鄉", "烏坵鄉"],
-  "連江縣": ["南竿鄉", "北竿鄉", "莒光鄉", "東引鄉"]
-};
+  // 清空主要輸出區域
+  const output = document.getElementById("output");
+  if (output) output.innerHTML = "";
+}
 
+// 縣市列表
+const cities = [
+  "臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市",
+  "基隆市", "新竹市", "新竹縣", "苗栗縣", "彰化縣", "南投縣",
+  "雲林縣", "嘉義市", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣",
+  "臺東縣", "澎湖縣", "金門縣", "連江縣"
+];
 
 // 初始設定
 window.addEventListener("DOMContentLoaded", () => {
   const citySelect = document.getElementById("city");
-  const districtSelect = document.getElementById("district");
-  const districtLabel = document.getElementById("districtLabel");
-
+  
   // 載入縣市資料
-  for (const city in districts) {
-    const option = document.createElement("option");
-    option.value = city;
-    option.textContent = city;
-    citySelect.appendChild(option);
-  }
+  cities.forEach(city => {
+      const option = document.createElement("option");
+      option.value = city;
+      option.textContent = city;
+      citySelect.appendChild(option);
+  });
 
   document.getElementById("weather").addEventListener("click", () => {
-    closeAllFeatureBoxes(); 
-    document.getElementById("weatherBox").style.display = "block";
+      closeAllFeatureBoxes(); 
+      document.getElementById("weatherBox").style.display = "block";
   });
 
   document.getElementById("closeWeather").addEventListener("click", () => {
-    document.getElementById("weatherBox").style.display = "none";
-    document.getElementById("output").innerHTML = "";
-  });
-
-  citySelect.addEventListener("change", function () {
-    const city = this.value;
-    districtSelect.innerHTML = "<option value=''>請選擇行政區</option>";
-    if (districts[city]) {
-      districtLabel.style.display = "block";
-      districtSelect.style.display = "block";
-      districts[city].forEach(d => {
-        const opt = document.createElement("option");
-        opt.value = d;
-        opt.textContent = d;
-        districtSelect.appendChild(opt);
-      });
-    } else {
-      districtLabel.style.display = "none";
-      districtSelect.style.display = "none";
-    }
+      document.getElementById("weatherBox").style.display = "none";
+      document.getElementById("output").innerHTML = "";
   });
 
   document.getElementById("submitWeather").addEventListener("click", checkWeather);
 });
 
 function checkWeather() {
-    const city = document.getElementById("city").value;
-    const apiKey = "CWA-20035795-9F2B-4491-9525-4FEF7C9A2143";
-    const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${apiKey}&locationName=${city}`;
+  const city = document.getElementById("city").value;
+  if (!city) {
+      document.getElementById("output").innerHTML = "<p style='color: red;'>請選擇縣市！</p>";
+      return;
+  }
   
-    document.getElementById("output").innerHTML = "<p>查詢天氣中...</p>";
-  
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
+  const apiKey = "CWA-20035795-9F2B-4491-9525-4FEF7C9A2143";
+  const url = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${apiKey}&locationName=${city}`;
+
+  document.getElementById("output").innerHTML = "<p>查詢天氣中...</p>";
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
         const location = data.records.location[0];
         const cityName = location.locationName;
         const weather = location.weatherElement;
-  
+
         const wx = weather[0].time[0].parameter.parameterName; // 天氣現象
         const pop = weather[1].time[0].parameter.parameterName; // 降雨機率
         const minT = weather[2].time[0].parameter.parameterName; // 最低溫
         const ci = weather[3].time[0].parameter.parameterName; // 舒適度
         const maxT = weather[4].time[0].parameter.parameterName; // 最高溫
-  
+
         document.getElementById("output").innerHTML = `
           <div class='weather-card'>
             <h2>🌤 ${cityName} - 今明 36 小時天氣預報</h2>
@@ -113,11 +77,12 @@ function checkWeather() {
             <p><strong>😊 舒適度:</strong> ${ci}</p>
           </div>
         `;
-      })
-      .catch(err => {
+    })
+    .catch(err => {
         document.getElementById("output").innerHTML = `<p>查詢失敗：${err.message}</p>`;
-      });
-  }
+    });
+}
+
 
 //地圖導航
 function openMap() {
