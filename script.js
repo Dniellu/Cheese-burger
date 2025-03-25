@@ -267,113 +267,134 @@ function showImage() {
   document.getElementById("result").style.display = "block";
 }
 
-//其他服務區塊
+// 其他服務區塊
 function otherServices() {
-    closeAllFeatureBoxes();
-    document.getElementById("output").innerHTML = `
-    <div class='service-options'>
-      <button onclick="openFoodWheel()">🎡 美食轉盤</button>
-      <button onclick="openWhiteboard()">📝 電子白板</button>
-    </div>`;
+  closeAllFeatureBoxes();
+  document.getElementById("output").innerHTML = `
+  <div class='service-options'>
+    <button onclick="openFoodWheel()">🎡 美食轉盤</button>
+    <button onclick="openWhiteboard()">📝 電子白板</button>
+  </div>`;
 }
+const canvasId = "wheelCanvas";
 
-let options = ["壽司", "燒烤", "火鍋", "炸雞", "拉麵", "便當"];
-let spinning = false;
-let wheelCreated = false;
-
-// 點擊 "美食轉盤" 按鈕後，動態載入轉盤
 function openFoodWheel() {
-    if (!wheelCreated) {
-        // 創建轉盤 HTML
-        let foodWheelModal = document.createElement("div");
-        foodWheelModal.id = "foodWheelModal";
-        foodWheelModal.className = "wheel-container";
-        foodWheelModal.innerHTML = `
-            <canvas id="wheelCanvas" width="300" height="300"></canvas>
-            <div id="pointer" class="pointer"></div>
-            <button class="spin-btn" id="spinBtn">轉動!</button>
-            <button class="close-btn" id="closeBtn">關閉</button>
-            <p id="result"></p>
-        `;
+  // 確保不會重複插入轉盤
+  if (document.getElementById("foodWheelContainer")) return;
 
-        // 插入到網頁
-        document.body.appendChild(foodWheelModal);
+  document.getElementById("output").innerHTML += `
+  <div id="foodWheelContainer" class="food-wheel-container">
+      <canvas id="${canvasId}" width="300" height="300"></canvas>
+      <button id="spinButton">開始!</button>
+      <button onclick="closeFoodWheel()">關閉轉盤</button>
+      <p id="resultText"></p>
+  </div>`;
 
-        // 繪製轉盤
-        drawWheel();
-
-        // 綁定按鈕事件
-        document.getElementById("spinBtn").addEventListener("click", spinWheel);
-        document.getElementById("closeBtn").addEventListener("click", closeFoodWheel);
-
-        wheelCreated = true; // 標記轉盤已創建
-    }
-
-    // 顯示轉盤
-    document.getElementById("foodWheelModal").style.display = "block";
+  initFoodWheel();
 }
 
-// 關閉美食轉盤
 function closeFoodWheel() {
-    document.getElementById("foodWheelModal").style.display = "none";
+  const foodWheel = document.getElementById("foodWheelContainer");
+  if (foodWheel) foodWheel.remove();
 }
 
-// 繪製轉盤（使用 Canvas）
-function drawWheel() {
-    let canvas = document.getElementById("wheelCanvas");
-    let ctx = canvas.getContext("2d");
-    let numOptions = options.length;
-    let centerX = canvas.width / 2;
-    let centerY = canvas.height / 2;
-    let radius = centerX; // 半徑
+function initFoodWheel() {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+  const spinButton = document.getElementById("spinButton");
+  const resultText = document.getElementById("resultText");
 
-    for (let i = 0; i < numOptions; i++) {
-        let startAngle = (i * 2 * Math.PI) / numOptions;
-        let endAngle = ((i + 1) * 2 * Math.PI) / numOptions;
-        
-        // 設定顏色（交錯顏色）
-        ctx.fillStyle = i % 2 === 0 ? "#FFD700" : "#FF6347";
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-        ctx.closePath();
-        ctx.fill();
+  const foodOptions = [
+      { name: "生煎包"},
+      { name: "師園"},
+      { name: "13 Burger"},
+      { name: "燈籠滷味" },
+      { name: "牛老大" },
+      { name: "Salad"}
+  ];
 
-        // 設定文字
-        ctx.fillStyle = "black";
-        ctx.font = "16px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+  const colors = ["#FF5733", "#33FF57", "#3357FF", "#F1C40F", "#9B59B6", "#E67E22", "#1ABC9C", "#D35400"];
+  const slices = foodOptions.length;
+  const sliceAngle = (2 * Math.PI) / slices;
+  let currentAngle = 0;
+  let spinning = false;
+  let spinVelocity = 0;
 
-        let textAngle = startAngle + (endAngle - startAngle) / 2;
-        let textX = centerX + Math.cos(textAngle) * (radius * 0.7);
-        let textY = centerY + Math.sin(textAngle) * (radius * 0.7);
-        ctx.fillText(options[i], textX, textY);
-    }
-}
+  function drawWheel() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 10;
+  
+      for (let i = 0; i < slices; i++) {
+          const startAngle = currentAngle + i * sliceAngle;
+          const endAngle = currentAngle + (i + 1) * sliceAngle;
+          
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+          ctx.fillStyle = colors[i % colors.length];
+          ctx.fill();
+          ctx.stroke();
+          
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.rotate(startAngle + sliceAngle / 2);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "white";
+          ctx.font = "16px Arial";
+          ctx.fillText(foodOptions[i].name, radius - 20, 10);
+          ctx.restore();
+          
+          const img = new Image();
+          img.src = foodOptions[i].img;
+          img.onload = function() {
+              ctx.save();
+              ctx.translate(centerX, centerY);
+              ctx.rotate(startAngle + sliceAngle / 2);
+              ctx.drawImage(img, radius - 50, -15, 30, 30);
+              ctx.restore();
+          };
+      }
+  
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY - radius);
+      ctx.lineTo(centerX - 10, centerY - radius - 10);
+      ctx.lineTo(centerX + 10, centerY - radius - 10);
+      ctx.closePath();
+      ctx.fill();
+  }
 
-// 轉動轉盤
-function spinWheel() {
-    if (spinning) return;
-    spinning = true;
+  drawWheel();
 
-    let canvas = document.getElementById("wheelCanvas");
-    let randomDegree = Math.floor(3600 + Math.random() * 360);
-    let selectedIndex = Math.floor((360 - (randomDegree % 360)) / (360 / options.length));
-    let selectedFood = options[selectedIndex % options.length];
+  function spinWheel() {
+      if (spinning) return;
+      spinning = true;
+      spinVelocity = Math.random() * 20 + 15;
+      let deceleration = 0.99;
+  
+      function animate() {
+          if (spinVelocity > 0.1) {
+              spinVelocity *= deceleration;
+              currentAngle += spinVelocity * 0.05;
+              drawWheel();
+              requestAnimationFrame(animate);
+          } else {
+              spinning = false;
+              selectResult();
+          }
+      }
+      animate();
+  }
 
-    // 旋轉轉盤
-    canvas.style.transition = "transform 3s ease-out";
-    canvas.style.transform = `rotate(${randomDegree}deg)`;
+  function selectResult() {
+      let finalAngle = currentAngle % (2 * Math.PI);
+      let selectedIndex = Math.floor(((2 * Math.PI - finalAngle) / sliceAngle) % slices);
+      resultText.innerText = "今天吃: " + foodOptions[selectedIndex].name;
+  }
 
-    // 同時旋轉箭頭
-    document.getElementById("pointer").style.transition = "transform 3s ease-out";
-    document.getElementById("pointer").style.transform = `rotate(${randomDegree}deg)`;
-
-    setTimeout(() => {
-        document.getElementById("result").innerText = `今天吃: ${selectedFood}! 🍽️`;
-        spinning = false;
-    }, 3000);
+  spinButton.addEventListener("click", spinWheel);
 }
 
 
