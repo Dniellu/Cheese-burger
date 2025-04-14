@@ -17,13 +17,23 @@
     </div>
   </header>
 
-  <h1 id="description" data-i18n="description">智慧路牌系統</h1>
+  <h1 id="homepage" data-i18n="description">智慧路牌系統</h1>
+
+  <!-- 顯示中原標準時間 -->
+  <div id="time-display">
+    <span id="time">--:--:--</span>
+  </div>
 
   <div class="button-container">
-    <button id="weather" data-i18n="weather">🌤 天氣查詢</button>
+    <button id="weather" onclick="openWeather()" data-i18n="weather">🌤 天氣查詢</button>
     <button id="map" onclick="openMap()" data-i18n="map">🗺 地圖導航</button>
     <button onclick="openClassroomGuide()">🏫 教室導引</button>
     <button id="services" onclick="otherServices()" data-i18n="services">🔧 其他服務</button>
+  </div>
+
+  <!-- 商家DM展示 -->
+  <div id="dm-container">
+    <img src="images/sample-dm.jpg" alt="商家DM" id="dm-image">
   </div>
 
   <div class="weather-container">
@@ -33,14 +43,12 @@
       <select id="city">
         <option value="">請選擇縣市</option>
       </select>
-  
       <button id="submitWeather">📡 查詢天氣</button>
       <button id="closeWeather" class="close-btn">❌ 關閉查詢</button>
+      <button onclick="goHome()">⬅️ 返回首頁</button>
     </div>
-  
     <div id="output" class="weather-output"></div>
   </div>
-  
 
   <div id="classroomBox" class="container" style="display: none;">
     <select id="area" onchange="updateClassrooms()">
@@ -50,22 +58,19 @@
       <option value="qin">勤</option>
       <option value="pu">樸</option>
     </select>
-
     <select id="floor" onchange="updateClassrooms()">
       <option value="">請選擇樓層</option>
     </select>
-
     <select id="classroom">
       <option value="">請選擇教室</option>
     </select>
-
     <button onclick="showImage()">顯示圖片</button>
-
     <div id="weatherDisplay">
       <div id="result" style="display: none;">
         <img id="classroom-image" src="" alt="教室圖片" />
       </div>
     </div>
+    <button onclick="goHome()">⬅️ 返回首頁</button>
   </div>
 
   <div id="ai-assistant" class="assistant-button">
@@ -92,12 +97,26 @@
   <script src="classroom.js"></script>
   <script src="utils.js"></script>
   <script>
+    function goHome() {
+      document.getElementById("dm-container").style.display = "block";
+      document.getElementById("output").innerHTML = "";
+      document.getElementById("weatherBox").style.display = "none";
+      document.getElementById("classroomBox").style.display = "none";
+      document.getElementById("result").style.display = "none";
+    }
+  
+    function openWeather() {
+      closeAllFeatureBoxes();
+      document.getElementById("dm-container").style.display = "none";
+      document.getElementById("weatherBox").style.display = "block";
+    }
+  
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js")
         .then(() => console.log("Service Worker 註冊成功"))
         .catch((error) => console.log("Service Worker 註冊失敗:", error));
     }
-
+  
     async function loadLanguage(lang) {
       const res = await fetch('languages.json');
       const data = await res.json();
@@ -109,18 +128,32 @@
         }
       });
     }
-
+  
     document.getElementById('language-selector').addEventListener('change', e => {
       loadLanguage(e.target.value);
     });
-
+  
     loadLanguage('zh');
-
+  
     function toggleClassroomGuide() {
       const box = document.getElementById("classroomBox");
       box.style.display = box.style.display === "none" ? "block" : "none";
     }
+  
+    // 顯示時間
+    function updateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById("time").textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
   </script>
-      <div id="serviceContainer"></div> <!-- 這裡會透過 JS 動態加入按鈕 -->
+  
+
+  <div id="serviceContainer"></div>
 </body>
 </html>
+

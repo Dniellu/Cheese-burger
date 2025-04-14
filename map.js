@@ -1,6 +1,8 @@
 //地圖導航
 function openMap() {
     closeAllFeatureBoxes();
+    document.getElementById("dm-container").style.display = "none"; // 隱藏 DM
+  
     document.getElementById("output").innerHTML = `
       <div class='map-options'>
         <button onclick="findFood()">🍜 美食地圖</button>
@@ -8,8 +10,11 @@ function openMap() {
         <button onclick="findNearestBUS()">🚏 公車站牌位置</button>
         <button onclick="findNearestMRT()">🚇 捷運站位置</button>
         <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
+        <div style="margin-top: 20px;">
+          <button onclick="goHome()">⬅️ 返回首頁</button>
+        </div>
       </div>`;
-}
+  }
 //美食地圖
 const foodSpots = [
     { name: "八方雲集（浦城店）", address: "台北市大安區和平東路一段182-3號", lat: 25.026391204355118,  lng: 121.53000996795559 },

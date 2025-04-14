@@ -1,3 +1,20 @@
+function goHome() {
+  document.getElementById("dm-container").style.display = "block";
+  document.getElementById("output").innerHTML = "";
+  document.getElementById("weatherBox").style.display = "none";
+  document.getElementById("classroomBox").style.display = "none";
+  document.getElementById("result").style.display = "none";
+}
+
+function updateTime() {
+  const now = new Date();
+  const taiwanTime = now.toLocaleTimeString('zh-TW', { hour12: false, timeZone: 'Asia/Taipei' });
+  document.getElementById("time").textContent = taiwanTime;
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+
 const apiKey = "df0db18b400c04fca56c5117612d6276";
 // {天氣查詢功能(A)}
 function closeAllFeatureBoxes() {
