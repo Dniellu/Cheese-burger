@@ -267,4 +267,55 @@ function showImage() {
   document.getElementById("result").style.display = "block";
 }
 
+function updateClassrooms() {
+  const area = document.getElementById("area").value;
+  const floor = document.getElementById("floor").value;
+  const classroomSelect = document.getElementById("classroom");
+
+  // 清除舊的選項
+  classroomSelect.innerHTML = '<option value="">請選擇教室</option>';
+
+  // 若未選擇完整區域與樓層，停用教室選單
+  if (!area || !floor) {
+    classroomSelect.disabled = true;
+    return;
+  }
+
+  // 模擬教室資料（可依實際需求修改）
+  const classroomData = {
+    cheng: {
+      "1樓": ["誠101", "誠102", "誠104", "誠105","誠106", "誠107", "誠108", "誠109"],
+      "2樓": ["誠201","誠202","誠203","誠204","誠205","誠206","誠207","誠208"],
+      "3樓": ["誠301","誠302","誠303","誠304","誠305","誠306","誠307"],
+      "4樓": ["誠401","誠402"], 
+    },
+    zheng: {
+      "1樓": ["正101","正102","正103","正104","正105","正106"],
+      "2樓": ["正201","正202","正203","正204","正205","正206"],
+      "3樓": ["正301","正302","正303","正304","正305","正306"],
+      "4樓": ["正401","正402","正403","正404","正405","正406","正407"]
+    },
+    qin: {
+      "3樓": ["勤301", "勤302"],
+    },
+    pu: {
+      "1樓": [ "樸105", "樸106"],
+      "2樓": ["樸201", "樸202", "樸203", "樸204", "樸205", "樸206"],
+      "3樓": ["樸301", "樸302", "樸303", "樸304", "樸305", "樸306", "樸307"],
+      "4樓": ["樸401", "樸402", "樸403", "樸404", "樸405", "樸406", "樸407"],
+    }
+  };
+
+  const classrooms = classroomData[area]?.[floor] || [];
+
+  // 將教室選項加入下拉選單
+  classrooms.forEach(room => {
+    const option = document.createElement("option");
+    option.value = room;
+    option.textContent = room;
+    classroomSelect.appendChild(option);
+  });
+
+  classroomSelect.disabled = classrooms.length === 0;
+}
 
