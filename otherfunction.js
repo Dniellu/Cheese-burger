@@ -4,9 +4,10 @@ function otherServices() {
     document.getElementById("output").innerHTML = `
     <div class='service-options'>
       <button onclick="openFoodWheel()">🎡 美食轉盤</button>
-      <button onclick="openWhiteboard()">📝 電子白板</button>
+      <button onclick="emergency()">🚨 SOS 緊急按鈕</button>
     </div>`;
   }
+  
   const canvasId = "wheelCanvas";
   
   function openFoodWheel() {
@@ -134,11 +135,6 @@ function otherServices() {
     
   
     spinButton.addEventListener("click", spinWheel);
-  }
-  
-  
-  function openWhiteboard() {
-    alert("即將開啟電子白板功能！");
   }
   
   //小助手
