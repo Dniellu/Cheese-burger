@@ -38,16 +38,25 @@ function openClassroomGuide() {
     `;
   }
   
-function showImage() {
-  const classroom = document.getElementById("classroom").value;
-  if (!classroom) return alert("請選擇完整資訊");
-  const path = `images/${classroom}.jpg`;
-  const img = document.getElementById("classroom-image");
-  img.src = path;
-  img.onerror = () => img.src = "images/default.jpg";
-  img.onload = () => console.log("圖片加載成功：", path);
-  document.getElementById("result").style.display = "block";
-}
+  function showImage() {
+    const classroom = document.getElementById("classroom").value;
+    if (!classroom) return alert("請選擇完整資訊");
+  
+    // 顯示圖片
+    const path = `images/${classroom}.jpg`;
+    const img = document.getElementById("classroom-image");
+    img.src = path;
+    img.onerror = () => img.src = "images/default.jpg";
+    img.onload = () => console.log("圖片加載成功：", path);
+    document.getElementById("result").style.display = "block";
+  
+    // 傳送選取資料到 ESP32
+    fetch(`http://<你的ESP32 IP>/rotate?classroom=${encodeURIComponent(classroom)}`)
+      .then(res => res.text())
+      .then(msg => console.log("ESP32 回應：", msg))
+      .catch(err => console.error("傳送失敗：", err));
+  }
+  
 
 function updateClassrooms() {
   const area = document.getElementById("area").value;
