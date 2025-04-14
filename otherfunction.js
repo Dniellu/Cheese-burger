@@ -41,7 +41,13 @@ function otherServices() {
         { name: "13 Burger"},
         { name: "燈籠滷味" },
         { name: "牛老大" },
-        { name: "Salad"}
+        { name: "夏威夷生魚飯"},
+        { name: "甘泉魚麵"},
+        { name: "銀兔咖哩"},
+        { name: "丼口飯食"},
+        { name: "蚩尤鐵板燒"},
+        { name: "蛋幾ㄌㄟˇ"},
+        { name: "八方雲集"},
     ];
   
     const colors = ["#FF5733", "#33FF57", "#3357FF", "#F1C40F", "#9B59B6", "#E67E22", "#1ABC9C", "#D35400"];
@@ -120,10 +126,12 @@ function otherServices() {
     }
   
     function selectResult() {
-        let finalAngle = currentAngle % (2 * Math.PI);
-        let selectedIndex = Math.floor(((2 * Math.PI - finalAngle) / sliceAngle) % slices);
-        resultText.innerText = "今天吃: " + foodOptions[selectedIndex].name;
+      let finalAngle = currentAngle % (2 * Math.PI);
+      let pointerAngle = (3 * Math.PI / 2 - finalAngle + 2 * Math.PI) % (2 * Math.PI); // 指向上方
+      let selectedIndex = Math.floor(pointerAngle / sliceAngle);
+      resultText.innerText = "今天吃: " + foodOptions[selectedIndex].name;
     }
+    
   
     spinButton.addEventListener("click", spinWheel);
   }
