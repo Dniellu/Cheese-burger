@@ -299,3 +299,12 @@ select {
     width: 120px;
     margin: 8px;
 }
+
+/* === 公車站牌樣式 === */
+.station-card {
+    background: #e3f2fd;
+    border-left: 6px solid #2196F3;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+  }

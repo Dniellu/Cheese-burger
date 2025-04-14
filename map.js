@@ -5,12 +5,65 @@ function openMap() {
       <div class='map-options'>
         <button onclick="findFood()">🍜 美食地圖</button>
         <button onclick="findLocations()">🏫 校區介紹</button>
-        <button onclick="findBusstation()">🚏 公車站牌位置</button>
+        <button onclick="findNearestBUS()">🚏 公車站牌位置</button>
         <button onclick="findNearestMRT()">🚇 捷運站位置</button>
         <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
       </div>`;
 }
-
+//美食地圖
+const foodSpots = [
+    { name: "八方雲集（浦城店）", address: "台北市大安區和平東路一段182-3號", lat: 25.026391204355118,  lng: 121.53000996795559 },
+    { name: "師園鹹酥雞", address: "台北市大安區師大路39巷14號", lat: 25.024619139008344,  lng: 121.5290237370823 },
+    { name: "13 Burger", address: "台北市大安區師大路49巷13號1樓", lat: 25.024410716521547,  lng: 121.52937516798522 },
+    { name: "燈籠滷味", address: "台北市大安區師大路43號", lat: 25.024738046314173,  lng: 121.52867589496981 },
+    { name: "牛老大牛肉麵", address: "台北市大安區龍泉街19-2號", lat: 25.025005532603156,  lng: 121.5294764968212 }
+  ];
+  
+  // 顯示美食地圖
+  function findFood() {
+    if (!navigator.geolocation) {
+      alert("❌ 您的瀏覽器不支援定位功能！");
+      return;
+    }
+  
+    document.getElementById("output").innerHTML = "<p>📍 正在取得您的位置並載入美食資料...</p>";
+  
+    navigator.geolocation.getCurrentPosition(position => {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+  
+      const sorted = foodSpots.map(spot => ({
+        ...spot,
+        distance: getDistance(userLat, userLng, spot.lat, spot.lng)
+      })).sort((a, b) => a.distance - b.distance);
+  
+      const container = document.getElementById("output");
+      container.innerHTML = `<h2>🍜 附近的美食推薦</h2>`;
+  
+      sorted.forEach(spot => {
+        const el = document.createElement("div");
+        el.className = "station-card"; // 沿用 CSS 樣式
+        el.innerHTML = `
+          <h3>${spot.name}</h3>
+          <p><strong>📍 地址:</strong> ${spot.address}</p>
+          <p><strong>📏 距離:</strong> ${spot.distance.toFixed(2)} 公里</p>
+          <button class="navigate-btn" onclick="openGoogleMaps(${spot.lat}, ${spot.lng})">🚀 開啟導航</button>
+        `;
+        container.appendChild(el);
+      });
+  
+      // 加入返回按鈕
+      const backButton = document.createElement("button");
+      backButton.textContent = "⬅️ 返回";
+      backButton.onclick = openMap;
+      backButton.style.marginTop = "20px";
+      container.appendChild(backButton);
+  
+    }, error => {
+      document.getElementById("output").innerHTML = `<p>❌ 取得位置失敗：${error.message}</p>`;
+    });
+  }
+  
 //校區介紹
 function findLocations() {
     document.getElementById("output").innerHTML = `
@@ -19,7 +72,11 @@ function findLocations() {
         <button onclick="showCampusInfo('圖書館校區')">📚 圖書館校區</button>
         <button onclick="showCampusInfo('公館校區')">🏢 公館校區</button>
         <button onclick="showCampusInfo('林口校區')">🌳 林口校區</button>
-      </div>`;
+      </div>
+      <div style="margin-top: 20px;">
+        <button onclick="openMap()">⬅️ 返回</button>
+      </div>
+    `;
   }
   
   function showCampusInfo(name) {
@@ -38,37 +95,83 @@ function findLocations() {
         <button onclick="findLocations()">⬅️ 返回校區選單</button>
       </div>`;
   }
+
 //公車站資料
 const busStations = [
-  { name: "師大(正門)",  address: "台北市中正區羅斯福路二段", lat: 25.026561533860896,  lng: 121.52787469175102 },
-  { name: "師大(正門對面)",  address: "台北市大安區羅斯福路三段", lat: 25.02687262224867,  lng: 121.52781568315359 },
-  { name: "師大(師大路)",  address: "台北市大安區信義路二段", lat: 25.026119203701775,  lng: 121.52851842190495 },
-  { name: "師大綜合大樓",  address: "台北市大安區信義路二段", lat: 25.026425432446974,   lng: 121.52996145035577 },
-  { name: "師大(師大路)",  address: "台北市大安區信義路二段", lat: 25.026119203701775,  lng: 121.52851842190495 },
-];
+    {
+      name: "師大(正門)",
+      address: "台北市大安區和平東路一段",
+      lat: 25.026561533860896,
+      lng: 121.52787469175102
+    },
+    {
+      name: "師大(正門對面)",
+      address: "台北市大安區和平東路一段",
+      lat: 25.02687262224867,
+      lng: 121.52781568315359
+    },
+    {
+      name: "師大(師大路)",
+      address: "台北市大安區師大路",
+      lat: 25.026119203701775,
+      lng: 121.52851842190495
+    },
+    {
+      name: "師大綜合大樓(綜合大樓前)",
+      address: "台北市大安區浦城街",
+      lat: 25.026712217400604,
+      lng: 121.53003655221535
+    },
+    {
+      name: "師大綜合大樓(八方雲集側)",
+      address: "台北市大安區浦城街",
+      lat: 25.026401128606224,
+      lng: 121.52995072152815
+    }
+  ];
+  
 
-//捷運站位置
-function findNearestMRT() {
-  if (!navigator.geolocation) return alert("❌ 不支援定位功能");
-  navigator.geolocation.getCurrentPosition(pos => {
-    const { latitude: userLat, longitude: userLng } = pos.coords;
-    const sorted = mrtStations.map(s => ({
-      ...s, distance: getDistance(userLat, userLng, s.lat, s.lng)
-    })).sort((a, b) => a.distance - b.distance).slice(0, 3);
-    const container = document.getElementById("output");
-    container.innerHTML = "<h2>🚇 捷運站位置</h2>";
-    sorted.forEach(s => {
-      const el = document.createElement("div");
-      el.className = "station-card";
-      el.innerHTML = `
-        <h3>${s.name} (${s.line})</h3>
-        <p><strong>📍 地址:</strong> ${s.address}</p>
-        <p><strong>📏 距離:</strong> ${s.distance.toFixed(2)} 公里</p>
-        <button class="navigate-btn" onclick="openGoogleMaps(${s.lat}, ${s.lng})">🚀 導航</button>`;
-      container.appendChild(el);
-    });
-  }, err => alert("定位失敗: " + err.message));
-}
+//公車站位置
+function findNearestBUS() {
+    if (!navigator.geolocation) return alert("❌ 不支援定位功能");
+  
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude: userLat, longitude: userLng } = pos.coords;
+  
+      const sorted = busStations
+        .map(s => ({
+          ...s,
+          distance: getDistance(userLat, userLng, s.lat, s.lng)
+        }))
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 5);  // 顯示 5 筆資料
+  
+      const container = document.getElementById("output");
+      container.innerHTML = "<h2>🚏 附近的公車站牌</h2>";
+  
+      sorted.forEach(s => {
+        const el = document.createElement("div");
+        el.className = "station-card";
+        el.innerHTML = `
+          <h3>${s.name}</h3>
+          <p><strong>📍 地址:</strong> ${s.address}</p>
+          <p><strong>📏 距離:</strong> ${s.distance.toFixed(2)} 公里</p>
+          <button class="navigate-btn" onclick="openGoogleMaps(${s.lat}, ${s.lng})">🚀 導航</button>
+        `;
+        container.appendChild(el);
+      });
+  
+      // 加上返回按鈕
+      const backButton = document.createElement("button");
+      backButton.textContent = "⬅️ 返回";
+      backButton.onclick = openMap;
+      backButton.style.marginTop = "20px";
+      container.appendChild(backButton);
+  
+    }, err => alert("定位失敗: " + err.message));
+  }
+  
+  
 // 捷運站資料
 const mrtStations = [
     { name: "古亭站", line: "綠線 / 棕線", address: "台北市中正區羅斯福路二段", lat: 25.02602, lng: 121.52291 },
@@ -96,6 +199,13 @@ function findNearestMRT() {
           <button class="navigate-btn" onclick="openGoogleMaps(${s.lat}, ${s.lng})">🚀 導航</button>`;
         container.appendChild(el);
       });
+
+      // 加上返回按鈕
+      const backButton = document.createElement("button");
+      backButton.textContent = "⬅️ 返回";
+      backButton.onclick = openMap;
+      backButton.style.marginTop = "20px";
+      container.appendChild(backButton);
     }, err => alert("定位失敗: " + err.message));
 }
 
@@ -121,17 +231,18 @@ function findYoubike() {
     navigator.geolocation.getCurrentPosition(position => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
-        let stations = youbikeStations.map(station => {
-            return {
-                ...station,
-                distance: getDistance(userLat, userLng, station.lat, station.lng)
-            };
-        });
+
+        let stations = youbikeStations.map(station => ({
+            ...station,
+            distance: getDistance(userLat, userLng, station.lat, station.lng)
+        }));
+
         stations.sort((a, b) => a.distance - b.distance);
+
         let outputContainer = document.getElementById('output');
         outputContainer.innerHTML = "<h2>🚲 附近的 YouBike 站點</h2>";
 
-        stations.forEach(station => {
+        stations.slice(0, 5).forEach(station => {
             let stationCard = document.createElement('div');
             stationCard.className = 'station-card';
             stationCard.innerHTML = `
@@ -141,21 +252,22 @@ function findYoubike() {
             `;
             outputContainer.appendChild(stationCard);
         });
+
+        // ✅ 加上返回按鈕
+        const backButton = document.createElement("button");
+        backButton.textContent = "⬅️ 返回";
+        backButton.onclick = openMap;
+        backButton.style.marginTop = "20px";
+        outputContainer.appendChild(backButton);
+
     }, error => {
         alert("❌ 無法取得您的位置：" + error.message);
     });
 }
+
 
 // ✅ Google Maps 導航
 function openGoogleMaps(lat, lng) {
     window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
 }
 
-// ✅ 距離計算公式
-function getDistance(lat1, lng1, lat2, lng2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2)**2 + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLng/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
