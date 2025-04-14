@@ -34,7 +34,6 @@
           <button onclick="openClassroomGuide()">🏫 教室導引</button>
           <button id="services" onclick="otherServices()" data-i18n="services">🔧 其他服務</button>
         </div>
-
       
         <div class="weather-container">
           <div id="weatherBox" class="weather-form" style="display: none;">
@@ -92,12 +91,10 @@
         </div>
       
         <script src="script.js"></script>
+        <script src="otherfunction.js"></script>
         <script src="map.js"></script>
         <script src="classroom.js"></script>
         <script src="utils.js"></script>
-        <script src="emergency.js"></script>
-        <script src="otherfunction.js"></script>
-
         <script>
           function goHome() {
             document.getElementById("dm-container").style.display = "block";
@@ -161,19 +158,11 @@
             <img src="images/1_.png" class="slide" />
             <img src="images/2_.png" class="slide" />
             <img src="images/3_.png" class="slide" />
+            <img src="images/4_.png" class="slide" />
+            <img src="images/5_.png" class="slide" />
+            <img src="images/6_.png" class="slide" />
           </div>
         </div>
-
-        <!-- 緊急投影片 -->
-        <div id="emergencyScreen" style="display: none;">
-          <div class="slideshow" id="emergencySlideshow">
-            <img src="images/4_.png" class="emergency-slide" />
-            <img src="images/5_.png" class="emergency-slide" />
-            <img src="images/6_.png" class="emergency-slide" />
-          </div>
-        </div>
-
-        
       </body>
       </html>
       
