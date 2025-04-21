@@ -259,6 +259,12 @@ function findYoubike() {
           `;
           outputContainer.appendChild(stationCard);
       });
+      // 加上返回按鈕
+      const backButton = document.createElement("button");
+      backButton.textContent = "⬅️ 返回";
+      backButton.onclick = openMap;
+      backButton.style.marginTop = "20px";
+      output.appendChild(backButton);
   }, error => {
       alert("❌ 無法取得您的位置：" + error.message);
   });
