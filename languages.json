@@ -1,19 +1,30 @@
 {
-    "en": {
-      "title": "Smart Signpost",
-      "description": "Select a location to guide you.",
-      "weather": "Weather Inquiry",
-      "map": "Map Navigation",
-      "Youbike": "Youbike Station Inquiry",
-      "services": "Other Services"
-    },
-    "zh": {
-      "title": "智慧路牌",
-      "description": "選擇一個地點來引導您。",
-      "weather": "天氣查詢",
-      "map": "地圖導航",
-      "Youbike": "Youbike站點查詢",
-      "services": "其他服務"
-    }
+  "zh": {
+    "title": "智慧路牌",
+    "description": "智慧路牌系統",
+    "weather": "🌤 天氣查詢",
+    "map": "🗺 地圖導航",
+    "services": "🔧 其他服務",
+    "how_weather": "🌦 如何查詢天氣？",
+    "how_map": "🗺 如何使用地圖導航？",
+    "how_ubike": "🚲 如何查詢 YouBike 站點？",
+    "how_campus": "🏫 如何使用校園導覽？",
+    "how_metro": "🚇 如何查詢捷運站位置？",
+    "close_menu": "❌ 關閉選單",
+    "close_answer": "關閉"
+  },
+  "en": {
+    "title": "Smart Signpost",
+    "description": "Smart Signpost System",
+    "weather": "🌤 Weather Inquiry",
+    "map": "🗺 Map Navigation",
+    "services": "🔧 Other Services",
+    "how_weather": "🌦 How to check the weather?",
+    "how_map": "🗺 How to use map navigation?",
+    "how_ubike": "🚲 How to find YouBike stations?",
+    "how_campus": "🏫 How to use campus guide?",
+    "how_metro": "🚇 How to find MRT stations?",
+    "close_menu": "❌ Close Menu",
+    "close_answer": "Close"
   }
-  
+}
