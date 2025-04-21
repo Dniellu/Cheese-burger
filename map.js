@@ -13,11 +13,20 @@ function openMap() {
         <button onclick="findNearestBUS()">🚏 公車站牌位置</button>
         <button onclick="findNearestMRT()">🚇 捷運站位置</button>
         <button onclick="findYoubike()">🚲 YouBike 站點查詢</button>
-        <div style="margin-top: 20px;">
-          <button onclick="goHome()">⬅️ 返回首頁</button>
-        </div>
       </div>`;
   }
+}
+
+//關閉其他功能視窗
+const hide = id => {
+  const el = document.getElementById(id);
+  if (el) el.style.display = "none";
+};
+
+function closeAllFeatureBoxes() {
+  ["weatherBox", "classroomBox", "result", "dm-container"].forEach(hide);
+  const output = document.getElementById("output");
+  if (output) output.innerHTML = "";
 }
 
 // 美食地圖
@@ -208,29 +217,45 @@ function findNearestMRT() {
   }, err => alert("定位失敗: " + err.message));
 }
 
-// YouBike 站點查詢
 function findYoubike() {
   const output = document.getElementById("output");
-  if (output) {
-    output.innerHTML = "<p>🚲 載入 YouBike 站點...</p>";
+  if (!output) return alert("⚠️ 找不到 output 元素");
+  if (!navigator.geolocation) {
+    output.innerHTML += `
+    <div style="margin-top: 20px;">
+      <button onclick="openMap()">⬅️ 返回</button>
+    </div>`;
+    return;
   }
 
-  // 讀取站點數據並顯示
-  const url = 'ubike_data.json';
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      const stations = data.map(station => ({
-        ...station,
-        distance: getDistance(userLat, userLng, station.lat, station.lng)
-      }));
+  output.innerHTML = "<p>📍 正在定位並載入 YouBike 站點...</p>";
 
-      stations.sort((a, b) => a.distance - b.distance);
+  navigator.geolocation.getCurrentPosition(position => {
+    const userLat = position.coords.latitude;
+    const userLng = position.coords.longitude;
 
-      const output = document.getElementById("output");
-      if (output) {
+    // 官方台北市 YouBike 即時資料
+    const url = "https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json";
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        // 資料結構為 key-value 物件，要轉成陣列
+        const stations = Object.values(data.retVal).map(station => {
+          const lat = parseFloat(station.lat);
+          const lng = parseFloat(station.lng);
+          return {
+            name: station.sna,
+            address: station.ar,
+            lat,
+            lng,
+            distance: getDistance(userLat, userLng, lat, lng)
+          };
+        });
+
+        stations.sort((a, b) => a.distance - b.distance);
+
         output.innerHTML = "<h2>🚲 最近的 YouBike 站點</h2>";
-
         stations.slice(0, 5).forEach(station => {
           const el = document.createElement("div");
           el.className = "station-card";
@@ -243,19 +268,21 @@ function findYoubike() {
           output.appendChild(el);
         });
 
-        // 加上返回按鈕
         const backButton = document.createElement("button");
         backButton.textContent = "⬅️ 返回";
         backButton.onclick = openMap;
         backButton.style.marginTop = "20px";
         output.appendChild(backButton);
-      }
-    })
-    .catch(err => {
-      const output = document.getElementById("output");
-      if (output) output.innerHTML = "❌ 無法載入 YouBike 資料！";
-    });
+      })
+      .catch(err => {
+        output.innerHTML = "❌ 無法載入 YouBike 資料：" + err.message;
+      });
+
+  }, err => {
+    output.innerHTML = "❌ 定位失敗：" + err.message;
+  });
 }
+
 
 // 打開 Google 地圖
 function openGoogleMaps(lat, lng) {
@@ -263,14 +290,13 @@ function openGoogleMaps(lat, lng) {
   window.open(url, "_blank");
 }
 
-// 計算兩點間的距離（公里）
+//距離公式
 function getDistance(lat1, lng1, lat2, lng2) {
-  const R = 6371; // 地球半徑，單位：公里
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLng / 2) * Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const toRad = deg => deg * Math.PI / 180;
+  const R = 6371; // 地球半徑 (公里)
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return R * c;
 }
