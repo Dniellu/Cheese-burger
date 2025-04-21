@@ -217,69 +217,50 @@ function findNearestMRT() {
   }, err => alert("定位失敗: " + err.message));
 }
 
+// YouBike 站點資訊(C)
+const youbikeStations = [
+  { name: "臺灣師範大學(圖書館)", lat: 25.026641844177753, lng: 121.52978775765962 },
+  { name: "和平龍泉街口", lat: 25.026398864512807, lng: 121.52981525441362 },
+  { name: "和平金山路口", lat: 25.02681029168236, lng: 121.52560682138919 },
+  { name: "捷運古亭站(5號出口)", lat: 25.027805882693226, lng: 121.52246832834811 },
+  { name: "和平溫州街口", lat: 25.026580932568184, lng: 121.53390526724554 },
+  { name: "和平新生路口西南側", lat: 25.02615318481501, lng: 121.5343129630029 }
+];
+
+// <<YouBike 站點查詢功能(C)>>
 function findYoubike() {
-  const output = document.getElementById("output");
-  if (!output) return alert("⚠️ 找不到 output 元素");
   if (!navigator.geolocation) {
-    output.innerHTML += `
-    <div style="margin-top: 20px;">
-      <button onclick="openMap()">⬅️ 返回</button>
-    </div>`;
-    return;
+      alert("❌ 您的瀏覽器不支援定位功能！");
+      return;
   }
 
-  output.innerHTML = "<p>📍 正在定位並載入 YouBike 站點...</p>";
+  document.getElementById('output').innerHTML = "<p>📍 取得您的位置中...</p>";
 
   navigator.geolocation.getCurrentPosition(position => {
-    const userLat = position.coords.latitude;
-    const userLng = position.coords.longitude;
-
-    // 官方台北市 YouBike 即時資料
-    const url = "https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json";
-
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        // 資料結構為 key-value 物件，要轉成陣列
-        const stations = Object.values(data.retVal).map(station => {
-          const lat = parseFloat(station.lat);
-          const lng = parseFloat(station.lng);
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+      let stations = youbikeStations.map(station => {
           return {
-            name: station.sna,
-            address: station.ar,
-            lat,
-            lng,
-            distance: getDistance(userLat, userLng, lat, lng)
+              ...station,
+              distance: getDistance(userLat, userLng, station.lat, station.lng)
           };
-        });
-
-        stations.sort((a, b) => a.distance - b.distance);
-
-        output.innerHTML = "<h2>🚲 最近的 YouBike 站點</h2>";
-        stations.slice(0, 5).forEach(station => {
-          const el = document.createElement("div");
-          el.className = "station-card";
-          el.innerHTML = `
-            <h3>${station.name}</h3>
-            <p><strong>📍 地址:</strong> ${station.address}</p>
-            <p><strong>📏 距離:</strong> ${station.distance.toFixed(2)} 公里</p>
-            <button class="navigate-btn" onclick="openGoogleMaps(${station.lat}, ${station.lng})">🚀 導航</button>
-          `;
-          output.appendChild(el);
-        });
-
-        const backButton = document.createElement("button");
-        backButton.textContent = "⬅️ 返回";
-        backButton.onclick = openMap;
-        backButton.style.marginTop = "20px";
-        output.appendChild(backButton);
-      })
-      .catch(err => {
-        output.innerHTML = "❌ 無法載入 YouBike 資料：" + err.message;
       });
+      stations.sort((a, b) => a.distance - b.distance);
+      let outputContainer = document.getElementById('output');
+      outputContainer.innerHTML = "<h2>🚲 附近的 YouBike 站點</h2>";
 
-  }, err => {
-    output.innerHTML = "❌ 定位失敗：" + err.message;
+      stations.forEach(station => {
+          let stationCard = document.createElement('div');
+          stationCard.className = 'station-card';
+          stationCard.innerHTML = `
+              <h3>${station.name}</h3>
+              <p><strong>📏 距離:</strong> ${station.distance.toFixed(2)} 公里</p>
+              <button class="navigate-btn" onclick="openGoogleMaps(${station.lat}, ${station.lng})">🚀 開啟導航</button>
+          `;
+          outputContainer.appendChild(stationCard);
+      });
+  }, error => {
+      alert("❌ 無法取得您的位置：" + error.message);
   });
 }
 
