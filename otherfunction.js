@@ -136,7 +136,60 @@ function otherServices() {
   
     spinButton.addEventListener("click", spinWheel);
   }
+
+  //SOS緊急按鈕
+  function emergency() {
+    // 隱藏首頁與功能按鈕
+    closeAllFeatureBoxes();
+    document.getElementById("output").innerHTML = "";
+    const dm = document.getElementById("dm-container");
+    if (dm) dm.style.display = "none";
+    const buttonContainer = document.querySelector(".button-container");
+    if (buttonContainer) buttonContainer.style.display = "none";
   
+    // 顯示投影片播放區塊
+    document.getElementById("screensaver").style.display = "block";
+  
+    startSlideshow();
+  
+    // ⏳ 10 秒後返回首頁
+    setTimeout(() => {
+      stopSlideshowAndReturnHome();
+    }, 10000);
+  }
+  
+  function startSlideshow() {
+    const slides = document.querySelectorAll(".slide");
+    let currentIndex = 0;
+  
+    slides.forEach((slide, i) => {
+      slide.style.display = i === 0 ? "block" : "none";
+    });
+  
+    setInterval(() => {
+      slides[currentIndex].style.display = "none";
+      currentIndex = (currentIndex + 1) % slides.length;
+      slides[currentIndex].style.display = "block";
+    }, 3000); // 每3秒換一張
+  }
+  
+  function stopSlideshowAndReturnHome() {
+    // 隱藏輪播畫面
+    document.getElementById("screensaver").style.display = "none";
+  
+    // 顯示首頁功能按鈕
+    const dm = document.getElementById("dm-container");
+    if (dm) dm.style.display = "block";
+    const buttonContainer = document.querySelector(".button-container");
+    if (buttonContainer) buttonContainer.style.display = "flex"; // 或 "block"，視你的樣式而定
+  
+    // 清除圖片顯示狀態
+    document.querySelectorAll(".slide").forEach(slide => {
+      slide.style.display = "none";
+    });
+  }
+  
+
   //小助手
   function showMenu() {
     document.getElementById('menu').style.display = 'block';
