@@ -199,11 +199,18 @@ function otherServices() {
   function showAnswer(option) {
     const responses = {
       weather: "您可以點擊「天氣查詢」按鈕，輸入城市名稱後，即可查看最新的天氣資訊。",
-      map: "點擊「地圖導航」按鈕，選擇需要的功能（如美食地圖、公車站點、YouBike 站點等）。",
-      ubike: "點擊「YouBike 站點查詢」按鈕，系統會顯示您附近的站點與距離。",
-      campus: "點擊「校區介紹」按鈕，選擇校區即可看到地址與導航按鈕。",
-      metro: "點擊「捷運站位置」按鈕，系統將顯示離您最近的三個捷運站與距離。"
+      youbike: "點擊「YouBike 查詢」按鈕，網站會顯示最近的 YouBike 站點資訊，包括可借與可還車輛數量。",
+      map: "點選「地圖導航」按鈕，系統將引導您至嵌入式 Google 地圖介面，您可選擇目的地並啟動路線規劃。",
+      services: "點擊「其他服務」後，您將看到以下可選功能：🎯 美食轉盤（轉出推薦餐廳）與 🚨 SOS 緊急模式（啟動警示與疏散提示）。",
+      foodWheel: "點選「其他服務」→「美食轉盤」，畫面會顯示一個轉盤。按下「開始！」即可隨機轉出一間餐廳。可按「關閉轉盤」結束使用。",
+      sosMode: "點擊「其他服務」→「SOS 緊急按鈕」，將會啟動閃爍紅色警示背景、播放警報音效、顯示警告圖片與疏散提示。",
+      howToStart: "首次使用時，請先點擊「天氣查詢」、「地圖導航」或「其他服務」任一功能進行探索，系統會根據您的需求提供對應資訊。",
+      returnHome: "若要返回首頁，只需點選畫面左上角的首頁圖示，或重新整理頁面即可。",
+      soundOff: "若無法聽到警報聲，請檢查您的裝置是否靜音或音量過低，並確認硬體端的蜂鳴器是否接通。",
+      foodWheelCriteria: "美食轉盤目前隨機從內建清單中選出推薦餐廳，未來版本可根據地理位置與評價進行優化推薦。",
+      
     };
+    
     document.getElementById('answer-text').innerText = responses[option] || '無效選項';
     document.getElementById('menu').style.display = 'none';
     document.getElementById('answer').style.display = 'block';
