@@ -1,4 +1,3 @@
-
 /* === 基本樣式設定 === */
 body {
     font-family: 'Arial', sans-serif;
@@ -191,11 +190,13 @@ select {
 }
 
 .station-card {
-    background: #f8f9fa;
+    background: #e3f2fd;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: left;
+    border-left: 6px solid #2196F3;
+    margin: 10px 0;
 }
 
 .station-card h3 {
@@ -218,14 +219,9 @@ select {
     padding: 20px;
 }
 
-#weatherBox button {
-    width: 90%;
-    margin: 10px 0;
-}
-
 #weatherBox, #weatherDisplay {
-    margin-left: 80px;       
-    margin-bottom: 40px;     
+    margin-left: 80px;
+    margin-bottom: 40px;
     flex: 1;
     max-width: 400px;
     min-width: 300px;
@@ -233,17 +229,21 @@ select {
     border-radius: 12px;
     background: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    text-align: left;
     border: 2px solid #3498db;
-    width: 320px;
-    text-align: center; 
+    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
+    width: 320px;
 }
 
 #weatherDisplay {
     border-color: #2ecc71;
+}
+
+#weatherBox button {
+    width: 90%;
+    margin: 10px 0;
 }
 
 /* === 響應式設計 === */
@@ -301,32 +301,26 @@ select {
 }
 
 /* === 公車站牌樣式 === */
-.station-card {
-    background: #e3f2fd;
-    border-left: 6px solid #2196F3;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
-  }
-
-  #dm-container {
+#dm-container {
     margin-top: 30px;
-  }
-  #dm-image {
+}
+
+#dm-image {
     max-width: 90%;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  }
-  
-  #time-display {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#time-display {
     margin: 20px 0;
     font-size: 28px;
     font-weight: bold;
     color: #2c3e50;
-  }
-  
-  #screensaver {
+}
+
+/* === 螢幕保護程式 (一般模式) === */
+#screensaver {
     position: fixed;
     top: 0;
     left: 0;
@@ -337,15 +331,16 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .slide {
+}
+
+.slide {
     max-width: 90%;
     max-height: 90%;
     display: none;
-  }
-  
-  #emergencyScreen {
+}
+
+/* === 緊急模式 === */
+#emergencyScreen {
     position: fixed;
     top: 0;
     left: 0;
@@ -356,15 +351,15 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .emergency-slide {
+}
+
+.emergency-slide {
     max-width: 90%;
     max-height: 90%;
     display: none;
-  }
-  
-  #sosButton {
+}
+
+#sosButton {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -376,6 +371,4 @@ select {
     border-radius: 10px;
     z-index: 100000;
     cursor: pointer;
-  }
-  
-  
+}
